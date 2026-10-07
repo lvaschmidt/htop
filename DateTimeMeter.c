@@ -35,8 +35,12 @@ static void DateTimeMeter_updateValues(Meter* this) {
    struct tm result;
    const struct tm* lt = localtime_r(&host->realtime.tv_sec, &result);
    if (As_Meter(this) == &ClockMeter_class) {
+      this->values[0] = lt->tm_hour * 60 + lt->tm_min;
       strftime(this->txtBuffer, sizeof(this->txtBuffer), "%H:%M:%S", lt);
    } else if (As_Meter(this) == &DateMeter_class) {
+      this->values[0] = lt->tm_yday;
+      int year = lt->tm_year + 1900;
+      this->total = (((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0)) ? 366 : 365;
       strftime(this->txtBuffer, sizeof(this->txtBuffer), "%F", lt);
    } else {
       strftime(this->txtBuffer, sizeof(this->txtBuffer), "%F %H:%M:%S", lt);
@@ -50,9 +54,9 @@ const MeterClass ClockMeter_class = {
    },
    .updateValues = DateTimeMeter_updateValues,
    .defaultMode = TEXT_METERMODE,
-   .supportedModes = (1 << TEXT_METERMODE) | (1 << LED_METERMODE),
-   .maxItems = 0,
-   .total = 0.0,
+   .supportedModes = (1 << BAR_METERMODE) | (1 << TEXT_METERMODE) | (1 << LED_METERMODE),
+   .maxItems = 1,
+   .total = 1440,
    .attributes = ClockMeter_attributes,
    .name = "Clock",
    .uiName = "Clock",
@@ -66,9 +70,9 @@ const MeterClass DateMeter_class = {
    },
    .updateValues = DateTimeMeter_updateValues,
    .defaultMode = TEXT_METERMODE,
-   .supportedModes = (1 << TEXT_METERMODE) | (1 << LED_METERMODE),
-   .maxItems = 0,
-   .total = 0.0,
+   .supportedModes = (1 << BAR_METERMODE) | (1 << TEXT_METERMODE) | (1 << LED_METERMODE),
+   .maxItems = 1,
+   .total = 365,
    .attributes = DateMeter_attributes,
    .name = "Date",
    .uiName = "Date",
