@@ -791,6 +791,7 @@ static int CRT_colorSchemes[LAST_COLORSCHEME][LAST_COLORELEMENT] = {
       [HELP_BOLD] = A_BOLD | ColorPair(Cyan, Black),
       [HELP_SHADOW] = A_BOLD | ColorPairGrayBlack,
       [CLOCK] = ColorPair(Green, Black),
+      [DATE] = ColorPair(Green, Black),
       [CHECK_BOX] = ColorPair(Green, Black),
       [CHECK_MARK] = A_BOLD | ColorPair(Green, Black),
       [CHECK_TEXT] = ColorPair(Cyan, Black),
